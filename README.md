@@ -1,5 +1,7 @@
 # APEX CONNECT 2020 - APEX-Autorisierung in der Praxis wartbar mit PL/SQL umsetzen
 
+[Vortrag APEX Connect 2020 ](https://programm.doag.org/apex/2020/#/scheduledEvent/594982)
+
 Demo for roles and dynamic assignment of rights in Oracle APEX.
 
 Jede Komponente in der Applikation schützen – wartbar und dynamisch – später vom Support einfach anpassbar
@@ -14,8 +16,8 @@ Aber am Ende muss das so dynamisch erfolgen, dass der Betrieb das auch selbstän
 Im Vortrag wird aufgezeigt, wie diese Aufgaben in der Praxis in einer zentralen Applikation für die Ausfall Erkennung von Kunden einer große Bankengruppen umgesetzt wurde und welche Möglichkeiten dazu APEX bietet.
 
 Im Vortrag wird auf die folgenden Punkte eingegangen:
-• Architektur APEX - Übersicht der Möglichkeiten der Autorisierung
-• Wie die eingebauten Funktionen mit eigener Logik erweitert werden können.
-o Praxis Beispiel: mit PL/SQL für eigenes „Authorization Scheme“ in PL/SQL zum Filtern von APEX Items auf Basis von Stammdaten
-• Architektur Ansätze, an welchen Stellen welche Features (Datenbank oder APEX) am besten im praktischen Einsatz angewendet werden können
-• Apex Build Option für die Security einsetzen
+* Architektur APEX - Übersicht der Möglichkeiten der Autorisierung
+* Wie die eingebauten Funktionen mit eigener Logik erweitert werden können.
+  * Praxis Beispiel: mit PL/SQL für eigenes „Authorization Scheme“ in PL/SQL zum Filtern von APEX Items auf Basis von Stammdaten
+* Architektur Ansätze, an welchen Stellen welche Features (Datenbank oder APEX) am besten im praktischen Einsatz angewendet werden können
+* Apex Build Option für die Security einsetzen
