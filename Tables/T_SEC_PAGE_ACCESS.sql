@@ -10,7 +10,7 @@ create sequence T_SEC_PAGE_ACCESS_SEQ start with 500 minvalue 500;;
 --drop table T_SEC_PAGE_ACCESS;
 
 create table T_SEC_PAGE_ACCESS (
-     DDE_SK                         number(15) not null constraint t_sec_page_access_pk primary key
+     SEC_SK                         number(15) not null constraint t_sec_page_access_pk primary key
     ,PAGE_NAME                      varchar2(255)
     ,PAGE_ID                        number(15)
     ,MENUE_ID                       number
@@ -32,7 +32,7 @@ create index IDX_T_SEC_PAGE_ACCESS_MENUE_ID on T_SEC_PAGE_ACCESS(MENUE_ID);
 -- +====================================================+	
 COMMENT ON TABLE T_SEC_PAGE_ACCESS         is 'Role you need to access this page';
 
-COMMENT ON COLUMN T_SEC_PAGE_ACCESS.DDE_SK                is 'Primary Key';
+COMMENT ON COLUMN T_SEC_PAGE_ACCESS.SEC_SK                is 'Primary Key';
 COMMENT ON COLUMN T_SEC_PAGE_ACCESS.PAGE_ID               is 'APEX PAGE ID';
 COMMENT ON COLUMN T_SEC_PAGE_ACCESS.MENUE_ID              is 'APEX MENUE Entry for this Page';
 COMMENT ON COLUMN T_SEC_PAGE_ACCESS.OPERATOR_READONLY     is 'OPERATOR_READONLY ROLE needed for this page';

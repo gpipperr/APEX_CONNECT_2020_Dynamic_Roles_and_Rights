@@ -1,0 +1,14 @@
+syntax: glob
+
+########################
+# no old logfiles
+*.log
+*.out
+*.tmp
+
+##################
+# Word Tempfiles
+~$*.*
+##################
+# no back Files
+*.~*

@@ -1,16 +1,16 @@
 --------------------------------------------------------
 --  DDL for Table T_SEC_ELEMENT_ACCESS
 --------------------------------------------------------
---drop sequence T_SEC_ELEMENT_ACCESS_SEQ;
+drop sequence T_SEC_ELEMENT_ACCESS_SEQ;
 
-create sequence T_SEC_ELEMENT_ACCESS_SEQ start with 500 minvalue 500;;
+create sequence T_SEC_ELEMENT_ACCESS_SEQ start with 500 minvalue 500;
 
 -- +====================================================+	
 
---drop table T_SEC_ELEMENT_ACCESS;
+drop table T_SEC_ELEMENT_ACCESS;
 
 create table T_SEC_ELEMENT_ACCESS (
-     DDE_SK                         number(15) not null constraint T_SEC_ELEMENT_ACCESS_pk primary key
+     SEC_SK                         number(15) not null constraint T_SEC_ELEMENT_ACCESS_pk primary key
     ,PAGE_NAME                      varchar2(255)
     ,PAGE_ID                        number(15)
     ,ELEMENT_ID                     number
@@ -35,7 +35,7 @@ create index IDX_T_SEC_ELEMENT_ACCESS_MENUE_ID on T_SEC_ELEMENT_ACCESS(ELEMENT_I
 -- +====================================================+	
 COMMENT ON TABLE T_SEC_ELEMENT_ACCESS         is 'Role you need to access this APEX element';
 
-COMMENT ON COLUMN T_SEC_ELEMENT_ACCESS.DDE_SK                is 'Primary Key';
+COMMENT ON COLUMN T_SEC_ELEMENT_ACCESS.SEC_SK                is 'Primary Key';
 COMMENT ON COLUMN T_SEC_ELEMENT_ACCESS.PAGE_ID               is 'APEX PAGE ID';
 COMMENT ON COLUMN T_SEC_ELEMENT_ACCESS.PAGE_NAME             is 'APEX PAGE Name';
 COMMENT ON COLUMN T_SEC_ELEMENT_ACCESS.ELEMENT_ID            is 'APEX Element ID on this Page';

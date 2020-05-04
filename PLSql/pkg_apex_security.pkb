@@ -165,7 +165,7 @@ AS
         -- grant access one time and wirte page into control table
          v_check:=true;
       
-        insert into T_SEC_PAGE_ACCESS(DDE_SK,PAGE_ID) values ( T_SEC_PAGE_ACCESS_SEQ.nextval,p_page_id); 
+        insert into T_SEC_PAGE_ACCESS(SEC_SK,PAGE_ID) values ( T_SEC_PAGE_ACCESS_SEQ.nextval,p_page_id); 
         commit;
       
        end if;
@@ -259,7 +259,7 @@ AS
        update set PAGE_NAME=p.PAGE_NAME
     when not matched
      then 
-      insert ( DDE_SK,PAGE_NAME,PAGE_ID,ADMINISTRATOR) values
+      insert ( SEC_SK,PAGE_NAME,PAGE_ID,ADMINISTRATOR) values
        ( T_SEC_PAGE_ACCESS_SEQ.nextval
         , p.PAGE_NAME
         , p.page_id
@@ -451,7 +451,7 @@ AS
             
             end if;
             
-            insert into T_SEC_ELEMENT_ACCESS(DDE_SK
+            insert into T_SEC_ELEMENT_ACCESS(SEC_SK
                                           ,PAGE_ID
                                           ,PAGE_NAME
                                           ,ELEMENT_ID
@@ -489,7 +489,7 @@ AS
    cursor c_region_update( p_application_id varchar2)
         is   
       select r.region_name           
-           , s.dde_sk
+           , s.sec_sk
         from apex_application_page_regions r  
         inner join T_SEC_ELEMENT_ACCESS s on ( s.page_id=r.page_id and r.static_id=s.ELEMEMT_STATIC_ID and s.element_type='APEX_APPLICATION_PAGE_REGIONS')
         where r.application_id=p_application_id;
@@ -499,7 +499,7 @@ AS
       select b.label
           ,  b.BUTTON_STATIC_ID
           , b.BUTTON_NAME
-          , s.dde_sk
+          , s.sec_sk
      from apex_application_page_buttons b  
       inner join T_SEC_ELEMENT_ACCESS s 
          on ( s.page_id=b.page_id and b.button_id=s.ELEMENT_ID and s.element_type='APEX_APPLICATION_BUTTONS')
@@ -512,7 +512,7 @@ AS
        update T_SEC_ELEMENT_ACCESS
           set   ELEMENT_NAME     = rec.region_name
               , ELEMENT_LABEL    = rec.region_name 
-         where DDE_SK=rec.DDE_SK;    
+         where SEC_SK=rec.SEC_SK;    
     end loop;
     
     commit;        
@@ -524,7 +524,7 @@ AS
           set  ELEMENT_NAME    = rec.BUTTON_NAME
               ,ELEMENT_LABEL   = rec.label
              , ELEMEMT_STATIC_ID = rec.BUTTON_STATIC_ID
-         where DDE_SK=rec.DDE_SK;    
+         where SEC_SK=rec.SEC_SK;    
     end loop;
     
     commit; 
