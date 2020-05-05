@@ -1,6 +1,17 @@
+ -- =====================
+ -- Demo for dynamic use of APEX role concept
+ -- Gunther Pippèrr 2020(C) 
+ -- https://www.pipperr.de/dokuwiki/doku.php
+ -- 
+ -- APEX Connect 2020
+ -- https://programm.doag.org/apex/2020/#/scheduledEvent/594982
+ --
+ -- =====================
+
 --------------------------------------------------------
 --  DDL for Table T_SEC_ELEMENT_ACCESS
 --------------------------------------------------------
+ 
 drop sequence T_SEC_ELEMENT_ACCESS_SEQ;
 
 create sequence T_SEC_ELEMENT_ACCESS_SEQ start with 500 minvalue 500;

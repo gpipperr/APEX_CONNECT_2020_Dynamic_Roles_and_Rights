@@ -1,8 +1,30 @@
---set define off
---
 create or replace PACKAGE BODY PKG_APEX_SECURITY
 AS
 
+ -- =====================
+ -- Demo for dynamic use of APEX role concept
+ -- Gunther Pippèrr 2020(C) 
+ -- https://www.pipperr.de/dokuwiki/doku.php
+ -- 
+ -- APEX Connect 2020
+ -- https://programm.doag.org/apex/2020/#/scheduledEvent/594982
+ --
+ -- =====================
+
+    -- ============
+    -- Cursor to get the Menu ID of a page
+    -- =============
+
+   cursor c_menuid(p_application_id varchar2)
+    is
+     SELECT    p.page_id
+             , l.LIST_ENTRY_ID       
+             , l.entry_text
+        from  T_SEC_PAGE_ACCESS p  
+        inner join APEX_APPLICATION_LIST_ENTRIES l
+           on ( REPLACE(regexp_substr(l.entry_target, '[f?p=&APP_ID.:][[:digit:]]+[:]'),':','')=p.page_id)
+         where l.application_id=p_application_id 
+           and l.list_name='Desktop Navigation Menu' ;
 
    -- =====================
   -- split a string
@@ -66,8 +88,55 @@ AS
     group by  u.user_name;
     
     return upper(v_return);
+    exception
+       when NO_DATA_FOUND then
+        return 'NO_ROLE';
+       when others then
+        raise;
+    end getUserRoles;
+
+
+
+    -- =====================
+    -- function checkUserInRole
+    --  Check if User have a role
+    --  
+    --  return true is ok
+    -- 
+    -- =====================   
+    function checkUserInRole(  p_username  varchar2
+                             , p_role      varchar
+                             , p_app_id    number)
+    return boolean
+    is
+     
+     v_count pls_integer;
+     v_return boolean:=false;
+     
+    begin
+         select count(*)
+          into v_count
+          from  APEX_APPL_ACL_USER_ROLES u 
+        where u.application_id=p_app_id 
+         and u.user_name=p_username
+         and upper(u.role_name)=upper(p_role)
+         ;
     
-    end;
+        if v_count > 0 then
+         v_return:=true;
+        else
+         v_return:=false;
+        end if;
+        
+        return v_return;
+    
+    exception
+       when NO_DATA_FOUND then
+        return false;
+       when others then
+        raise;
+     end checkUserInRole;
+    
 
     -- =====================
    -- function checkPageAuthorisation
@@ -162,10 +231,22 @@ AS
       end loop;
     
       else
-        -- grant access one time and wirte page into control table
+        -- grant access one time and write page into control table
          v_check:=true;
-      
-        insert into T_SEC_PAGE_ACCESS(SEC_SK,PAGE_ID) values ( T_SEC_PAGE_ACCESS_SEQ.nextval,p_page_id); 
+        
+        -- grant the administrator the access rights to the page as default
+         insert into T_SEC_PAGE_ACCESS(SEC_SK,PAGE_ID,ADMINISTRATOR) values ( T_SEC_PAGE_ACCESS_SEQ.nextval,p_page_id,'Y'); 
+         
+         -- refresh all Menu Items
+         for rec in c_menuid( p_application_id => p_application_id)
+         loop
+            update T_SEC_PAGE_ACCESS
+                set  MENUE_ID   = rec.LIST_ENTRY_ID 
+                    ,MENU_NAME = rec.entry_text
+            where page_id=rec.page_id;    
+        end loop;
+    
+    
         commit;
       
        end if;
@@ -233,20 +314,13 @@ AS
   -- =====================
   -- procedure reloadPageSecurity
   -- Reload the Page Securtiy Table  
+  -- initialize the menu id pointing to this page
+  --
   -- =====================  
   procedure reloadPageSecurity(p_application_id varchar2)
   is
     
-    cursor c_menuid(p_application_id varchar2)
-    is
-     SELECT    p.page_id
-             , l.LIST_ENTRY_ID       
-             , l.entry_text
-        from  T_SEC_PAGE_ACCESS p  
-        inner join APEX_APPLICATION_LIST_ENTRIES l
-           on ( REPLACE(regexp_substr(l.entry_target, '[f?p=&APP_ID.:][[:digit:]]+[:]'),':','')=p.page_id)
-         where l.application_id=p_application_id 
-           and l.list_name='Desktop Navigation Menu' ;
+ 
  
   begin
    
@@ -458,7 +532,8 @@ AS
                                           ,ELEMENT_NAME
                                           ,ELEMENT_LABEL
                                           ,ELEMENT_TYPE
-                                          ,ELEMEMT_STATIC_ID) 
+                                          ,ELEMEMT_STATIC_ID
+                                          ,ADMINISTRATOR) 
              values ( T_SEC_ELEMENT_ACCESS_SEQ.nextval
                      ,p_page_id
                      ,v_page_name
@@ -466,7 +541,8 @@ AS
                      ,p_component_name
                      ,v_label
                      ,p_component_type
-                     ,v_static_id); 
+                     ,v_static_id
+                     ,'Y'); 
           
          end if;         
          
@@ -488,7 +564,8 @@ AS
    
    cursor c_region_update( p_application_id varchar2)
         is   
-      select r.region_name           
+      select r.STATIC_ID         
+           , r.region_name
            , s.sec_sk
         from apex_application_page_regions r  
         inner join T_SEC_ELEMENT_ACCESS s on ( s.page_id=r.page_id and r.static_id=s.ELEMEMT_STATIC_ID and s.element_type='APEX_APPLICATION_PAGE_REGIONS')
@@ -510,8 +587,9 @@ AS
     for rec in c_region_update( p_application_id => p_application_id)
     loop
        update T_SEC_ELEMENT_ACCESS
-          set   ELEMENT_NAME     = rec.region_name
+          set   ELEMENT_NAME     = rec.region_name 
               , ELEMENT_LABEL    = rec.region_name 
+              , ELEMEMT_STATIC_ID = rec.STATIC_ID
          where SEC_SK=rec.SEC_SK;    
     end loop;
     

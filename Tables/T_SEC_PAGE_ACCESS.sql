@@ -1,13 +1,24 @@
+ -- =====================
+ -- Demo for dynamic use of APEX role concept
+ -- Gunther Pippèrr 2020(C) 
+ -- https://www.pipperr.de/dokuwiki/doku.php
+ -- 
+ -- APEX Connect 2020
+ -- https://programm.doag.org/apex/2020/#/scheduledEvent/594982
+ --
+ -- =====================
+ 
+
 --------------------------------------------------------
 --  DDL for Table T_SEC_PAGE_ACCESS
 --------------------------------------------------------
---drop sequence T_SEC_PAGE_ACCESS_SEQ;
+drop sequence T_SEC_PAGE_ACCESS_SEQ;
 
-create sequence T_SEC_PAGE_ACCESS_SEQ start with 500 minvalue 500;;
+create sequence T_SEC_PAGE_ACCESS_SEQ start with 500 minvalue 500;
 
 -- +====================================================+	
 
---drop table T_SEC_PAGE_ACCESS;
+drop table T_SEC_PAGE_ACCESS;
 
 create table T_SEC_PAGE_ACCESS (
      SEC_SK                         number(15) not null constraint t_sec_page_access_pk primary key
