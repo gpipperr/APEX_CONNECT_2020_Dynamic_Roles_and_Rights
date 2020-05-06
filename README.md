@@ -21,3 +21,11 @@ Im Vortrag wird auf die folgenden Punkte eingegangen:
   * Praxis Beispiel: mit PL/SQL für eigenes „Authorization Scheme“ in PL/SQL zum Filtern von APEX Items auf Basis von Stammdaten
 * Architektur Ansätze, an welchen Stellen welche Features (Datenbank oder APEX) am besten im praktischen Einsatz angewendet werden können
 * Apex Build Option für die Security einsetzen
+
+
+Installation:
+
+* Schema in der Datenbank anlegen und in APEX berechtigen
+* Tabellen in Schema anlegen (Scripts unter Tables)
+* PL/SQL einspielen ( Scripts unter PLSql)
+* APP installieren über APEX
